@@ -1,3 +1,8 @@
+
+// Next JS
+import type { Metadata } from "next"
+
+// Components
 import { AppSidebar } from "@/components/app-sidebar"
 import { ChartAreaInteractive } from "@/components/chart-area-interactive"
 import { DataTable } from "@/components/data-table"
@@ -8,7 +13,12 @@ import {
   SidebarProvider,
 } from "@/components/ui/sidebar"
 
+// Data
 import data from "./data.json"
+
+export const metadata : Metadata = {
+  title: "Diamond | Dashboard",
+}
 
 export default function Page() {
   return (
