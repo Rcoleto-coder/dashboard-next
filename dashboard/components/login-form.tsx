@@ -1,24 +1,54 @@
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
+'use client'
+
+// React
+import { useState, useTransition } from "react"
+
+// Components
+import { SubmitButton } from "@/components/buttons/SubmitButton"
 import { Card, CardContent } from "@/components/ui/card"
 import {
   Field,
   FieldDescription,
   FieldGroup,
   FieldLabel,
-  FieldSeparator,
+  // FieldSeparator,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 
+// Utils
+import { cn } from "@/lib/utils"
+
+type Props = React.ComponentProps<"div"> & {
+  loginAction: (formData: FormData) => Promise<void>
+}
+
 export function LoginForm({
   className,
+  loginAction: action,
   ...props
-}: React.ComponentProps<"div">) {
+}: Props) {
+  const [error, setError] = useState<string | null>(null)
+  const [isPending, startTransition] = useTransition()
+
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card className="overflow-hidden p-0 bg-diamond-blue">
         <CardContent className="grid p-0 md:grid-cols-2 ">
-          <form className="p-6 md:p-8">
+          <form
+            onSubmit={async (e) => {
+              e.preventDefault()
+              const formData = new FormData(e.target as HTMLFormElement)
+              setError(null)
+              startTransition(async () => {
+                try {
+                  await action(formData)
+                } catch (err) {
+                  setError((err as Error).message)
+                }
+              })
+            }}
+            className="p-6 md:p-8"
+          >
             <FieldGroup>
               <div className="flex flex-col items-center gap-2 text-center">
                 <h1 className="text-2xl font-bold">Welcome to Diamond</h1>
@@ -30,6 +60,7 @@ export function LoginForm({
                 <FieldLabel htmlFor="email">Email</FieldLabel>
                 <Input
                   id="email"
+                  name="email"
                   type="email"
                   placeholder="m@example.com"
                   required
@@ -45,10 +76,22 @@ export function LoginForm({
                     Forgot your password?
                   </a>
                 </div>
-                <Input id="password" type="password" required />
+                <Input 
+                  id="password" 
+                  name="password" 
+                  type="password" 
+                  required 
+                />
               </Field>
+
+              {error && (
+                <p className="text-sm text-red-500 text-center">
+                  {error}
+                </p>
+              )}
+
               <Field>
-                <Button type="submit">Login</Button>
+                <SubmitButton pending={isPending} />
               </Field>
               {/* <FieldSeparator className="*:data-[slot=field-separator-content]:bg-card">
                 Or continue with
