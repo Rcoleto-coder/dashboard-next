@@ -1,7 +1,7 @@
 'use client'
 
 // React
-import { useState, useTransition } from "react"
+import { useState, useTransition, useActionState } from "react"
 
 // Components
 import { SubmitButton } from "@/components/buttons/SubmitButton"
@@ -18,35 +18,31 @@ import { Input } from "@/components/ui/input"
 // Utils
 import { cn } from "@/lib/utils"
 
-type Props = React.ComponentProps<"div"> & {
-  loginAction: (formData: FormData) => Promise<void>
+type LoginState = {
+  error?: string
+}
+
+type Props = {
+  className?: string
+  action: (prevState: LoginState, formData: FormData) => Promise<LoginState>
 }
 
 export function LoginForm({
   className,
-  loginAction: action,
+  action,
   ...props
 }: Props) {
-  const [error, setError] = useState<string | null>(null)
-  const [isPending, startTransition] = useTransition()
+
+  const [state, formAction, pending] = useActionState<LoginState, FormData>(
+    action,
+    {}
+  )
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card className="overflow-hidden p-0 bg-diamond-blue">
         <CardContent className="grid p-0 md:grid-cols-2 ">
-          <form
-            onSubmit={async (e) => {
-              e.preventDefault()
-              const formData = new FormData(e.target as HTMLFormElement)
-              setError(null)
-              startTransition(async () => {
-                try {
-                  await action(formData)
-                } catch (err) {
-                  setError((err as Error).message)
-                }
-              })
-            }}
+          <form action={formAction}
             className="p-6 md:p-8"
           >
             <FieldGroup>
@@ -84,14 +80,14 @@ export function LoginForm({
                 />
               </Field>
 
-              {error && (
+              {state?.error && (
                 <p className="text-sm text-red-500 text-center">
-                  {error}
+                  {state.error}
                 </p>
               )}
 
               <Field>
-                <SubmitButton pending={isPending} />
+                <SubmitButton pending={pending} />
               </Field>
               {/* <FieldSeparator className="*:data-[slot=field-separator-content]:bg-card">
                 Or continue with

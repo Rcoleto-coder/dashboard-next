@@ -3,14 +3,18 @@
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 
-export async function LoginAction(formData: FormData): Promise<void> {
+type LoginState = {
+  error?: string
+}
+
+export async function LoginAction(prevState: LoginState, formData: FormData): Promise<LoginState> {
 
     const email = formData.get("email")?.toString().trim().toLowerCase()
     const password = formData.get("password")?.toString()
 
     // Server-side validation
     if (!email || !password) {
-        throw new Error("Email and password are required.")
+        return { error: "Email and password are required." }
     }
 
     // Send credentials to the backend API
@@ -24,11 +28,16 @@ export async function LoginAction(formData: FormData): Promise<void> {
     })
 
     if (!response.ok) {
-        throw new Error("Invalid email or password.")
+        return { error: "Invalid email or password." }
     }
 
     // we now have a successful login, let's grab the token and set it in a cookie
-    const { token } = await response.json()
+    const token = await response.json()
+    console.log("Received token:", token)
+
+    if (!token) {
+        return { error: "No auth token returned from API." }
+    }
 
     const cookieStore = await cookies()
 
