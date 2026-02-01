@@ -1,4 +1,4 @@
-# Diamond Dashboard (Next.js)
+# Dashboard (Next.js)
 
 A modern dashboard application built with **Next.js**, featuring authentication, interactive charts, data tables, and a responsive sidebar layout.
 
