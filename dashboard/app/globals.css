@@ -80,13 +80,14 @@
   --sidebar-accent-foreground: hsl(240 5.9% 10%);
   --sidebar-border: hsl(220 13% 91%);
   --sidebar-ring: hsl(217.2 91.2% 59.8%);
+  /* Custom Colors */
   --diamond-blue: #202945;
 }
 
 .dark {
-  --background: #252525;
+  --background: #000000;
   --foreground: #fafafa;
-  --card: #353535;
+  --card: #171717;
   --card-foreground: #fafafa;
   --popover: #353535;
   --popover-foreground: #fafafa;
@@ -132,7 +133,7 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground;
   }
 
   /* Reset headings to browser defaults */
