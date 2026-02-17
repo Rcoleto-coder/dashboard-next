@@ -20,7 +20,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Dashboard | Login",
+  title: "Dashboard",
   description: "Dashboard",
 };
 

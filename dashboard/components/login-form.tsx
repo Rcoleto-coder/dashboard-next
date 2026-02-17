@@ -1,7 +1,10 @@
 'use client'
 
 // React
-import { useState, useTransition, useActionState } from "react"
+import { useActionState } from "react"
+
+// Constants
+import { ROUTES } from "@/constants"
 
 // Components
 import { SubmitButton } from "@/components/buttons/SubmitButton"
@@ -16,7 +19,6 @@ import {
   FieldDescription,
   FieldGroup,
   FieldLabel,
-  // FieldSeparator,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 
@@ -93,7 +95,7 @@ export function LoginForm({
               <Field>
                 <SubmitButton pending={pending} />
                 <FieldDescription className="text-center">
-                  Don&apos;t have an account? <a href="#">Sign up</a>
+                  Don&apos;t have an account? <a href={ROUTES.SIGNUP}>Sign up</a>
                 </FieldDescription>
               </Field>
 

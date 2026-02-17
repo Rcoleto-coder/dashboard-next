@@ -2,6 +2,9 @@
 // Next JS
 import type { Metadata } from "next"
 
+// Constants
+import { HTML_TITLE_PREFIX } from "@/constants"
+
 // Components
 import { AppSidebar } from "@/components/app-sidebar"
 import { ChartAreaInteractive } from "@/components/chart-area-interactive"
@@ -16,8 +19,10 @@ import {
 // Data
 import data from "./data.json"
 
+
+// Read the html title from the layout and add | Panel
 export const metadata : Metadata = {
-  title: "Diamond | Dashboard",
+  title: `${HTML_TITLE_PREFIX} | Panel`,
 }
 
 export default function Page() {
