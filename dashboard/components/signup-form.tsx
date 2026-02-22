@@ -1,4 +1,13 @@
-import { Button } from "@/components/ui/button"
+'use client'
+
+//  React
+import { useActionState } from "react"
+
+//  Constants
+import { ROUTES } from "@/constants"
+
+// Components
+import { CreateAccountButton } from "@/components/buttons/CreateAccountButton"
 import {
   Card,
   CardContent,
@@ -14,7 +23,21 @@ import {
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 
-export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
+type SignupState = {
+  error?: string
+}
+
+type Props = {
+  action: (prevState: SignupState, formData: FormData) => Promise<SignupState>
+} & React.ComponentProps<typeof Card>
+
+export function SignupForm({ action, ...props }: Props) {
+
+  const [state, formAction, pending] = useActionState<SignupState, FormData>(
+    action,
+    {}
+  )
+
   return (
     <Card {...props}>
       <CardHeader>
@@ -24,16 +47,24 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <form>
+        <form action={formAction}>
           <FieldGroup>
-            <Field>
+            {/* <Field>
+              // Let's use only email for now
               <FieldLabel htmlFor="name">Full Name</FieldLabel>
-              <Input id="name" type="text" placeholder="John Doe" required />
-            </Field>
+              <Input 
+                id="name" 
+                name="full_name" 
+                type="text" 
+                placeholder="Enter your name here" 
+                required 
+              />
+            </Field> */}
             <Field>
               <FieldLabel htmlFor="email">Email</FieldLabel>
               <Input
                 id="email"
+                name="email"
                 type="email"
                 placeholder="m@example.com"
                 required
@@ -45,23 +76,38 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
             </Field>
             <Field>
               <FieldLabel htmlFor="password">Password</FieldLabel>
-              <Input id="password" type="password" required />
+              <Input 
+                id="password"
+                name="password"
+                type="password"
+                required
+              />
               <FieldDescription>
-                Must be at least 8 characters long.
+                Must be at least 6 characters long.
               </FieldDescription>
             </Field>
             <Field>
               <FieldLabel htmlFor="confirm-password">
                 Confirm Password
               </FieldLabel>
-              <Input id="confirm-password" type="password" required />
+              <Input 
+                id="confirm-password"
+                name="confirm_password"
+                type="password"
+                required
+              />
               <FieldDescription>Please confirm your password.</FieldDescription>
             </Field>
+            {state?.error && (
+              <p className="text-sm text-red-500 text-center">
+                {state.error}
+              </p>
+            )}
             <FieldGroup>
               <Field>
-                <Button type="submit">Create Account</Button>
+                <CreateAccountButton pending={pending} />
                 <FieldDescription className="px-6 text-center">
-                  Already have an account? <a href="#">Sign in</a>
+                  Already have an account? <a href={ROUTES.LOGIN}>Sign in</a>
                 </FieldDescription>
               </Field>
             </FieldGroup>

@@ -47,7 +47,6 @@ export function LoginForm({
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <h1 className="text-2xl font-bold text-center">Welcome to your Dashboard</h1>
       <Card className="shadow-md">
         <CardHeader>
             <CardTitle>Login to your account</CardTitle>
@@ -104,7 +103,7 @@ export function LoginForm({
         </CardContent>
       </Card>
       <FieldDescription className="px-6 text-center">
-        <a href="#">Terms of Service</a> <a href="#">Privacy Policy</a><br />© 2026 Diamond
+        <a href="#">Terms of Service</a> <a href="#">Privacy Policy</a><br />© 2026 Dashboard SA
       </FieldDescription>
     </div>
   )
