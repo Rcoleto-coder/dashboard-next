@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   title: `${HTML_TITLE_PREFIX} | Signup`,
 }
 
-const SignupPage = () => {
+export default function SignupPage() {
   return (
     <main id="main" className="flex flex-col gap-4 min-h-svh w-full items-center justify-center p-6 md:p-10">
         <h1 className="sr-only">Signup</h1>
@@ -24,5 +24,3 @@ const SignupPage = () => {
    </main>
   )
 }
-
-export default SignupPage
