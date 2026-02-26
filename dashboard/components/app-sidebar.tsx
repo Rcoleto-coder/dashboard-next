@@ -1,6 +1,10 @@
 "use client"
 
 import * as React from "react"
+
+// Constants
+import { ROUTES } from "@/constants"
+
 import {
   IconCamera,
   IconChartBar,
@@ -117,19 +121,19 @@ const data = {
   navSecondary: [
     {
       title: "Settings",
-      url: "#",
+      url: ROUTES.SETTINGS,
       icon: IconSettings,
     },
-    {
-      title: "Get Help",
-      url: "#",
-      icon: IconHelp,
-    },
-    {
-      title: "Search",
-      url: "#",
-      icon: IconSearch,
-    },
+    // {
+    //   title: "Get Help",
+    //   url: "#",
+    //   icon: IconHelp,
+    // },
+    // {
+    //   title: "Search",
+    //   url: "#",
+    //   icon: IconSearch,
+    // },
   ],
   documents: [
     {
@@ -160,7 +164,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               asChild
               className="data-[slot=sidebar-menu-button]:!p-1.5"
             >
-              <a href="/">
+              <a href={ROUTES.HOME}>
                 <IconLayoutDashboard className="!size-5" />
                 <span className="text-base font-semibold">Dashboard</span>
               </a>
