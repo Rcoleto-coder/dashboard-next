@@ -8,6 +8,7 @@ import "./globals.css";
 
 //  Providers
 import { ThemeProvider } from "./providers/ThemeProvider";
+import { AccessibleAnnouncerProvider } from "./providers/AccessibleAnnouncerContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,14 +35,16 @@ export default function RootLayout({
       <body suppressHydrationWarning
         className={`${geistSans.variable} ${geistMono.variable} antialiased w-full h-screen`}
       >
-        <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-            >
-            {children}
-        </ThemeProvider>
+        <AccessibleAnnouncerProvider>
+          <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+              >
+              {children}
+          </ThemeProvider>
+        </AccessibleAnnouncerProvider>
       </body>
     </html>
   );
