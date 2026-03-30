@@ -1,11 +1,9 @@
 'use client'
 
-import { createContext, type PropsWithChildren, type AriaAttributes, useContext, useEffect, useRef, useState } from 'react'
-
-type Assertiveness = AriaAttributes['aria-live']
+import { createContext, type PropsWithChildren, useContext, useEffect, useRef, useState } from 'react'
 
 interface AccessibleAnnouncerContextType {
-  announce: (message: string, assertiveness: Assertiveness, clearAfter?: number) => void
+  announce: (message: string, clearAfter?: number) => void
 }
 
 const AccessibleAnnouncerContext = createContext<AccessibleAnnouncerContextType | undefined>(undefined)
@@ -29,13 +27,12 @@ const AccessibleAnnouncerContext = createContext<AccessibleAnnouncerContextType 
  *
  * // In a client component
  * const { announce } = useAnnounce()
- * announce('Focus has been changed to the selected heading', 'polite')       // clears after 2000ms
- * announce('Error occurred', 'assertive', 5000)       // clears after 5000ms
+ * announce('Focus has been changed to the selected heading')       // clears after 2000ms
+ * announce('Error occurred', 5000)       // clears after 5000ms
  * ```
  */
 export function AccessibleAnnouncerProvider({ children }: PropsWithChildren) {
   const [messages, setMessages] = useState<[string, string]>(['', ''])
-  const [assertiveness, setAssertiveness] = useState<[Assertiveness, Assertiveness]>(['polite', 'polite'])
   const currentSlot = useRef(0)
   const clearTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
@@ -44,10 +41,9 @@ export function AccessibleAnnouncerProvider({ children }: PropsWithChildren) {
    * Replaces any previous message and resets the auto-clear timer.
    *
    * @param message - The text to announce.
-   * @param assertiveness - The assertiveness of the announcement.
    * @param clearAfter - Time in ms before the region is cleared. Defaults to 2000.
    */
-  const announce = (message: string, assertiveness: Assertiveness, clearAfter = 2000) => {
+  const announce = (message: string, clearAfter = 2000) => {
     if (clearTimeoutRef.current) {
       clearTimeout(clearTimeoutRef.current)
     }
@@ -58,12 +54,6 @@ export function AccessibleAnnouncerProvider({ children }: PropsWithChildren) {
     setMessages(() => {
       const next: [string, string] = ['', '']
       next[nextSlot] = message
-      return next
-    })
-
-    setAssertiveness(() => {
-      const next: [Assertiveness, Assertiveness] = ['polite', 'polite']
-      next[nextSlot] = assertiveness
       return next
     })
 
@@ -83,8 +73,8 @@ export function AccessibleAnnouncerProvider({ children }: PropsWithChildren) {
   return (
     <AccessibleAnnouncerContext.Provider value={{ announce }}>
       {children}
-      <div className="sr-only" role="status" aria-live={assertiveness[0]} aria-atomic="true">{messages[0]}</div>
-      <div className="sr-only" role="status" aria-live={assertiveness[1]} aria-atomic="true">{messages[1]}</div>
+      <div className="sr-only" role="status" aria-live='polite' aria-atomic="true">{messages[0]}</div>
+      <div className="sr-only" role="status" aria-live='polite' aria-atomic="true">{messages[1]}</div>
     </AccessibleAnnouncerContext.Provider>
   )
 }
